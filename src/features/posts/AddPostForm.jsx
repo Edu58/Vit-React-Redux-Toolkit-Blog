@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Form, Button } from "react-bootstrap"
-import { postAdded } from "./postsSlice"
+import { addNewPost } from "./postsSlice"
 import { selectAllUsers } from "../users/usersSlice"
 
 
@@ -10,22 +10,29 @@ const AddPostForm = () => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [userId, setUserId] = useState('')
+    const [status, setStatus] = useState('idle')
 
     const users = useSelector(selectAllUsers)
 
-    const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
+    const canSave = [title, content, userId].every(Boolean) && status === 'idle'
 
     const handleFormSubmission = (e) => {
         e.preventDefault()
 
-        if (title && content) {
-            dispatch(
-                postAdded(title, content, userId)
-            )
-        }
+        if (canSave) {
+            try {
+                setStatus('pending')
+                dispatch(addNewPost({ title, body:content, userId })).unwrap()
 
-        setTitle('')
-        setContent('')
+                setTitle('')
+                setContent('')
+                setUserId('')
+            } catch (error) {
+                console.log('Failed to save post', err)
+            } finally {
+                setStatus('idle')
+            }
+        }
     }
 
     return (
