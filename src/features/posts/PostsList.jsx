@@ -7,10 +7,12 @@ const PostsList = () => {
 
     const posts = useSelector(selectAllPosts)
 
+    const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+
     return (
         <section className="mt-5">
             <h2 className="mb-2 text-primary">Posts</h2>
-            {posts.map((post) => {
+            {orderedPosts.map((post) => {
                 return (
                     <article key={post.id}>
                         <h3>{post.title}</h3>
