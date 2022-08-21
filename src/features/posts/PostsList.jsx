@@ -6,10 +6,9 @@ import PostsExcerpt from "./PostsExcerpt"
 const PostsList = () => {
     const dispatch = useDispatch()
 
+    const posts = useSelector(selectAllPosts)
     const status = useSelector(getPostsStatus)
     const error = useSelector(getPostsError)
-
-    const posts = useSelector(selectAllPosts)
 
     useEffect(() => {
         if (status == 'idle') {
@@ -19,19 +18,13 @@ const PostsList = () => {
 
     let content;
 
-    switch (status) {
-        case 'loading':
-            content = <p>Loading......</p>
-            break;
-        case 'succeeded':
-            const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-            content = orderedPosts.map(post => <PostsExcerpt post={post} />)
-            break;
-        case 'failed':
-            content = <p>{error}</p>
-            break;
-        default:
-            break;
+    if (status === 'loading') {
+        content = <p>Loading......</p>
+    } else if (status === 'succeeded') {
+        const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+        content = orderedPosts.map(post => <PostsExcerpt key={post.id} post={post} />)
+    } else if (status === 'failed') {
+        content = <p>{error}</p>
     }
 
     const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
