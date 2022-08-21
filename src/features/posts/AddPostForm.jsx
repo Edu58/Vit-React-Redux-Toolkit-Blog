@@ -28,7 +28,7 @@ const AddPostForm = () => {
 
     return (
         <section className="mt-4">
-            <h2>Add a new post</h2>
+            <h2 className="text-primary">Add a new post</h2>
 
             <Form onSubmit={handleFormSubmission}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
