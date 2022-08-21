@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from "react-redux"
+import { selectAllPosts } from "./postsSlice"
 
 const PostsList = () => {
 
-    const posts = useSelector((state) => state.posts)
+    const posts = useSelector(selectAllPosts)
 
     return (
         <section>

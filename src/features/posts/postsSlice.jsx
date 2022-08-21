@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 
 const initialState = [
     { id: '1', title: 'learning react + redux-toolkit', content: 'I am making a simple blog using vite + react + react-bootstrap + redux-toolkit' },
@@ -12,5 +13,7 @@ export const postSlice = createSlice({
 
     }
 })
+
+export const selectAllPosts = (state) => state.posts
 
 export default postSlice.reducer
