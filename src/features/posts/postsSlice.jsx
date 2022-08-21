@@ -6,13 +6,27 @@ const initialState = [
         id: '1',
         title: 'learning react + redux-toolkit',
         content: 'I am making a simple blog using vite + react + react-bootstrap + redux-toolkit',
-        date: sub(new Date(), {minutes: 3}).toISOString()   
+        date: sub(new Date(), { minutes: 3 }).toISOString(),
+        reactions: {
+            thumbsUp: 0,
+            wow: 0,
+            heart: 0,
+            rocket: 0,
+            coffee: 0
+        }
     },
     {
         id: '2',
         title: 'react is simple',
         content: 'reactjs is imple to learn and start using even as a beginner',
-        date: sub(new Date(), { minutes: 123 }).toISOString()
+        date: sub(new Date(), { minutes: 123 }).toISOString(),
+        reactions: {
+            thumbsUp: 0,
+            wow: 0,
+            heart: 0,
+            rocket: 0,
+            coffee: 0
+        }
     },
 ]
 
@@ -32,15 +46,31 @@ const postSlice = createSlice({
                         content,
                         userId,
                         date: new Date().toISOString(),
+                        reactions: {
+                            thumbsUp: 0,
+                            wow: 0,
+                            heart: 0,
+                            rocket: 0,
+                            coffee: 0
+                        }
                     }
                 }
             }
         },
+
+        addReaction(state, action) {
+            const { postId, reaction } = action.payload
+            const existing = state.find(post => post.id === postId)
+
+            if (existing) {
+                existing.reactions[reaction]++
+            }
+        }
     }
 })
 
 export const selectAllPosts = (state) => state.posts
 
-export const { postAdded } = postSlice.actions
+export const { postAdded, addReaction } = postSlice.actions
 
 export default postSlice.reducer
