@@ -1,11 +1,25 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import { sub } from 'date-fns'
+
+const BASE_URL = "https://jsonplaceholder.typicode.com/posts"
 
 const initialState = {
     posts: [],
     status: 'idle',
     error: null
 }
+
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+    try {
+        const response = await fetch(BASE_URL, {
+            method: 'GET'
+        })
+        return response.data
+
+    } catch (error) {
+        return error.message
+    }
+})
 
 // const initialState = [
 //     {
@@ -72,6 +86,37 @@ const postSlice = createSlice({
                 existing.reactions[reaction]++
             }
         }
+    },
+
+    extraReducers(builder) {
+        builder
+            .addCase(fetchPosts.pending, (state, action) => {
+                state.status = 'loading'
+            })
+            .addCase(fetchPosts.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+
+                let min = 1;
+                const loadedPosts = action.payload.map(post => {
+                    post.date = sub(new Date(), { minutes: 3 }).toISOString(),
+                        post.reactions = {
+                            thumbsUp: 0,
+                            wow: 0,
+                            heart: 0,
+                            rocket: 0,
+                            coffee: 0
+                        }
+
+                    return post
+                })
+
+                state.posts = state.posts.concat(loadedPosts)
+            })
+            .addCase(fetchPosts.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = action.error.message
+            })
+
     }
 })
 
