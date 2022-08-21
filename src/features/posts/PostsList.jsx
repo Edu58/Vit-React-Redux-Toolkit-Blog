@@ -6,7 +6,8 @@ const PostsList = () => {
     const posts = useSelector(selectAllPosts)
 
     return (
-        <section>
+        <section className="mt-4">
+            <h2 className="mb-2">Posts</h2>
             {posts.map((post) => {
                 return (
                     <article key={post.id}>
