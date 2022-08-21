@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { Form, Button } from "react-bootstrap"
-import { nanoid } from "@reduxjs/toolkit"
 import { postAdded } from "./postsSlice"
 
 const AddPostForm = () => {
@@ -14,11 +13,7 @@ const AddPostForm = () => {
 
         if (title && content) {
             dispatch(
-                postAdded({
-                    id: nanoid(),
-                    title,
-                    content,
-                })
+                postAdded(title, content)
             )
         }
 

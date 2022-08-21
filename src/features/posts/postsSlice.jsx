@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = [
     { id: '1', title: 'learning react + redux-toolkit', content: 'I am making a simple blog using vite + react + react-bootstrap + redux-toolkit' },
@@ -10,9 +9,20 @@ const postSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        postAdded(state, action) {
-            state.push(action.payload)
-        }
+        postAdded: {
+            reducer(state, action) {
+                state.push(action.payload)
+            },
+            prepare(title, content) {
+                return {
+                    payload: {
+                        id: nanoid(),
+                        title,
+                        content
+                    }
+                }
+            }
+        },
     }
 })
 
